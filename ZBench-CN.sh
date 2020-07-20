@@ -91,14 +91,14 @@ if  [ ! -e '/usr/bin/python' ]; then
 fi
 
 # Install Speedtest
-if  [ ! -e '/tmp/speedtest.py' ]; then
+if  [ ! -e '/tmp/speedtest' ]; then
     echo "Installing SpeedTest......"
     dir=$(pwd)
     cd /tmp/
-    wget -N --no-check-certificate https://raw.github.com/sivel/speedtest-cli/master/speedtest.py > /dev/null 2>&1
+    wget -N --no-check-certificate https://raw.github.com/woOzZ1/ZBench/master/speedtest > /dev/null 2>&1
     cd $dir
 fi
-chmod a+rx /tmp/speedtest.py
+chmod a+rx /tmp/speedtest
 
 
 # Install Zping-CN
@@ -168,7 +168,7 @@ speed() {
 
 speed_test_cn(){
     if [[ $1 == '' ]]; then
-        temp=$(python /tmp/speedtest.py --share 2>&1)
+        temp=$(python /tmp/speedtest 2>&1)
         is_down=$(echo "$temp" | grep 'Download')
         if [[ ${is_down} ]]; then
             local REDownload=$(echo "$temp" | awk -F ':' '/Download/{print $2}')
@@ -181,7 +181,7 @@ speed_test_cn(){
             local cerror="ERROR"
         fi
     else
-        temp=$(python /tmp/speedtest.py --server $1 --share 2>&1)
+        temp=$(python /tmp/speedtest -s $1 --share 2>&1)
         is_down=$(echo "$temp" | grep 'Download')
         if [[ ${is_down} ]]; then
             local REDownload=$(echo "$temp" | awk -F ':' '/Download/{print $2}')
@@ -217,7 +217,7 @@ speed_cn() {
     speed_test_cn '5145' '北京联通'
     speed_test_cn '6132' '湖南电信'
 
-    rm -rf /tmp/speedtest.py
+    rm -rf /tmp/speedtest
 }
 
 
