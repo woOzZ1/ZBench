@@ -73,7 +73,7 @@ if  [ ! -e '/tmp/besttrace' ]; then
     echo "Installing Besttrace......"
     dir=$(pwd)
     cd /tmp/
-    wget  -N --no-check-certificate https://raw.githubusercontent.com/FunctionClub/ZBench/master/besttrace > /dev/null 2>&1
+    wget  -N --no-check-certificate https://raw.githubusercontent.com/woOzZ1/ZBench/master/besttrace > /dev/null 2>&1
     cd $dir
 fi
 chmod a+rx /tmp/besttrace
@@ -106,21 +106,21 @@ if  [ ! -e '/tmp/ZPing-CN.py' ]; then
     echo "Installing ZPing-CN.py......"
     dir=$(pwd)
     cd /tmp/
-    wget -N --no-check-certificate https://raw.githubusercontent.com/FunctionClub/ZBench/master/ZPing-CN.py > /dev/null 2>&1
+    wget -N --no-check-certificate https://raw.githubusercontent.com/woOzZ1/ZBench/master/ZPing-CN.py > /dev/null 2>&1
     cd $dir
 fi
 chmod a+rx /tmp/ZPing-CN.py
 
 #"TraceRoute to Shanghai Telecom"
-/tmp/besttrace 61.129.42.6 > /tmp/sht.txt 2>&1 &
+/tmp/besttrace sh.189.cn > /tmp/sht.txt 2>&1 &
 #"TraceRoute to Shanghai Mobile"
-/tmp/besttrace speedtest2.sh.chinamobile.com > /tmp/shm.txt 2>&1 &
+/tmp/besttrace sh.10086.cn > /tmp/shm.txt 2>&1 &
 #"TraceRoute to Shanghai Unicom"
 /tmp/besttrace 210.22.80.1 > /tmp/shu.txt 2>&1 &
 #"TraceRoute to Guangdong Telecom"
-/tmp/besttrace 121.14.220.240 > /tmp/gdt.txt 2>&1 &
+/tmp/besttrace gd.189.cn > /tmp/gdt.txt 2>&1 &
 #"TraceRoute to Guangdong Mobile"
-/tmp/besttrace 211.136.192.6 > /tmp/gdm.txt 2>&1 &
+/tmp/besttrace gd.10086.cn > /tmp/gdm.txt 2>&1 &
 #"TraceRoute to Guangdong Unicom"
 /tmp/besttrace 221.5.88.88 > /tmp/gdu.txt 2>&1 &
 #"TraceRoute to Owner's Network"
