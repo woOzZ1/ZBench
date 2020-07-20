@@ -6,29 +6,6 @@ if  [ ! -e '/usr/bin/wget' ]; then
     echo "Error: wget command not found. You must be install wget command at first."
     exit 1
 fi
-read -p "Please Enter Your Host Provider: " Provider
-
-
-# Get IP
-OwnerIP=$(who am i | awk '{print $NF}' | sed -e 's/[()]//g')
-while :; do echo
-  read -p "Please Confirm Your Client IP:${OwnerIP} [y/n]: " ifOwnerIP
-  if [[ ! ${ifOwnerIP} =~ ^[y,n]$ ]]; then
-    echo "Input error! Please only input 'y' or 'n'"
-  else
-    break
-  fi
-done
-if [[ ${ifOwnerIP} == "n" ]]; then
-  while :; do echo
-    read -p "Please Enter Your Client IP: " OwnerIP
-    if [[ ! ${OwnerIP} ]]; then
-      echo "Input error! Cannot be void!"
-    else
-      break
-    fi
-  done
-fi
 
 
 # Check release
@@ -397,37 +374,3 @@ NetPiSM=$( sed -n "24p" /tmp/speed_cn.txt )
 NetUPCM=$( sed -n "25p" /tmp/speed_cn.txt )
 NetDWCM=$( sed -n "26p" /tmp/speed_cn.txt )
 NetPiCM=$( sed -n "27p" /tmp/speed_cn.txt )
-
-
-wget  -N --no-check-certificate https://raw.githubusercontent.com/FunctionClub/ZBench/master/Generate.py >> /dev/null 2>&1
-python Generate.py && rm -rf Generate.py && cp /root/report.html /tmp/report/index.html
-TSM=$( cat /tmp/shm.txt_table )
-TST=$( cat /tmp/sht.txt_table )
-TSU=$( cat /tmp/shu.txt_table )
-TGM=$( cat /tmp/gdm.txt_table )
-TGT=$( cat /tmp/gdt.txt_table )
-TGU=$( cat /tmp/gdu.txt_table )
-curl 'http://api.zbench.kirito.moe/action.php' --data "CPUmodel=$cname &CPUspeed=$freq MHz &CPUcore=$cores &HDDsize=$disk_total_size GB ($disk_used_size GB 已使用) &RAMsize=$tram MB ($uram MB 已使用)&SWAPsize=$swap MB ($uswap MB 已使用)&UPtime= $up&Arch=1&systemload=$load&OS= $opsy &Arch=$arch ($lbit 位)&Kernel=$kern &Virmethod=$virtua &IOa=$io1&IOb=$io2&IOc=$io3&NetCFspeec=$NetCFspeec&NetCFping=$NetCFping&NetLJPspeed=$NetLJPspeed&NetLJPping=$NetLJPping&NetLSGspeed=$NetLSGspeed&NetLSGping=$NetLSGping&NetLUKspeed=$NetLUKspeed&NetLUKping=$NetLUKping&NetLDEspeed=$NetLDEspeed&NetLDEping=$NetLDEping&NetLCAspeed=$NetLCAspeed&NetLCAping=$NetLCAping&NetSTXspeed=$NetSTXspeed&NetSTXping=$NetSTXping&NetSWAspeed=$NetSWAspeed&NetSWAping=$NetSWAping&NetSDEspeed=$NetSDEspeed&NetSDEping=$NetSDEping&NetSSGspeed=$NetSSGspeed&NetSSGping=$NetSSGping&NetSCNspeed=$NetSCNspeed&NetSCNping=$NetSCNping&NetUPST=$NetUPST&NetDWST=$NetDWST&NetPiST=$NetPiST&NetUPCT=$NetUPCT&NetDWCT=$NetDWCT&NetPiCT=$NetPiCT&NetUPXT=$NetUPXT&NetDWXT=$NetDWXT&NetPiXT=$NetPiXT&NetUPSU=$NetUPSU&NetDWSU=$NetDWSU&NetPiSU=$NetPiSU&NetUPCU=$NetUPCU&NetDWCU=$NetDWCU&NetPiCU=$NetPiCU&NetUPXM=$NetUPXM&NetDWXM=$NetDWXM&NetPiXM=$NetPiXM&NetUPSM=$NetUPSM&NetDWSM=$NetDWSM&NetPiSM=$NetPiSM&NetUPCM=$NetUPCM&NetDWCM=$NetDWCM&NetPiCM=$NetPiCM&TSM=$TSM&TST=$TST&TSU=$TSU&TGM=$TGM&TGT=$TGT&TGU=$TGU&AKEY=$AKEY&Provider=$Provider"
-
-IKEY=$(curl "http://api.zbench.kirito.moe/getkey.php?AKEY=$AKEY" 2>/dev/null)
-echo "Result Address：https://zbench.kirito.moe/record.php?IKEY=$IKEY"
-echo "Your bench data is saved to /root/report.html"
-
-# If use simple http server
-while :; do echo
-  read -p "Do you want to check your Test Report? [y/n]: " ifreport
-  if [[ ! $ifreport =~ ^[y,n]$ ]]; then
-    echo "Input error! Please only input 'y' or 'n'"
-  else
-    break
-  fi
-done
-
-if [[ $ifreport == 'y' ]];then
-    echo ""
-    myip=`curl -m 10 -s http://members.3322.org/dyndns/getip`
-    echo "Visit http://${myip}:8001/index.html to see your report，Press Ctrl + C to exit."
-	cd /tmp/report
-    python -m SimpleHTTPServer 8001
-    iptables -I INPUT -m state --state NEW -m tcp -p tcp --dport 8001 -j ACCEPT
-fi
